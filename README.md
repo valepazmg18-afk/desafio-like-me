@@ -98,4 +98,4 @@ El frontend se ejecuta con Vite y el servidor Express utiliza el puerto `3000`.
 
 ## Autor
 
-Valentina Muñoz
+Valentina Muñoz# desafio-like-me
