@@ -18,7 +18,7 @@ app.use(express.json());
 
 app.get("/posts", async (req, res) => {
   try {
-    const { rows } = await pool.query("SELECT * FROM posts");
+    const { rows } = await pool.query("SELECT * FROM posts ORDER BY id DESC");
     res.json(rows);
   } catch (error) {
     console.log(error);
@@ -41,6 +41,45 @@ app.post("/posts", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Error al crear el post" });
+  }
+});
+
+app.put("/posts/like/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const consulta = `
+      UPDATE posts
+      SET likes = likes + 1
+      WHERE id = $1
+      RETURNING *
+    `;
+
+    const { rows } = await pool.query(consulta, [id]);
+
+    res.json(rows[0]);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Error al agregar like" });
+  }
+});
+
+app.delete("/posts/:id", async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const consulta = `
+      DELETE FROM posts
+      WHERE id = $1
+      RETURNING *
+    `;
+
+    const { rows } = await pool.query(consulta, [id]);
+
+    res.json(rows[0]);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Error al eliminar el post" });
   }
 });
 

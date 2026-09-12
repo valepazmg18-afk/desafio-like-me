@@ -1,58 +1,81 @@
-# Like Me - Parte I
+# Desafío Like Me
 
-Desafío correspondiente al desarrollo de una aplicación que permite crear y visualizar publicaciones.
+Proyecto desarrollado como parte del desafío **Like Me**, utilizando React para el frontend, Node.js con Express para el backend y PostgreSQL para la base de datos.
 
-El proyecto utiliza una aplicación React como frontend y un servidor desarrollado con Node.js y Express, conectado a una base de datos PostgreSQL.
+El proyecto fue desarrollado en dos etapas, incorporando progresivamente las operaciones necesarias para administrar las publicaciones.
+
+## Desarrollo del desafío
+
+### Parte I
+
+En la primera etapa se implementó la conexión entre el frontend, el servidor y PostgreSQL.
+
+Se incorporaron las siguientes funcionalidades:
+
+- Conexión a PostgreSQL utilizando `pg`.
+- Habilitación de CORS.
+- Ruta `GET /posts` para obtener las publicaciones.
+- Ruta `POST /posts` para crear nuevas publicaciones.
+- Persistencia de los datos en PostgreSQL.
+
+### Parte II
+
+En la segunda etapa se amplió la API incorporando nuevas operaciones sobre las publicaciones:
+
+- Ruta `PUT /posts/like/:id` para aumentar los likes de una publicación.
+- Ruta `DELETE /posts/:id` para eliminar una publicación.
+- Manejo de posibles errores en las consultas SQL mediante `try/catch`.
+
+Además, el proyecto se reorganizó separando el **frontend** y el **backend** en carpetas independientes.
 
 ## Tecnologías utilizadas
 
+### Frontend
+
 - React
 - Vite
+- Axios
+
+### Backend
+
 - Node.js
 - Express
 - PostgreSQL
 - pg
 - CORS
-- Axios
 - dotenv
+- Nodemon
 
-## Funcionalidades
+## Estructura del proyecto
 
-- Obtener los posts almacenados en PostgreSQL.
-- Crear nuevos posts desde la aplicación.
-- Guardar título, imagen, descripción y likes de cada publicación.
-- Comunicación entre el frontend y backend mediante solicitudes HTTP.
-- Conexión a PostgreSQL utilizando el paquete `pg`.
-
-## Endpoints
-
-### Obtener posts
-
-```http
-GET /posts
+```text
+desafio-like-me/
+├── backend/
+│   ├── index.cjs
+│   ├── .env
+│   ├── .env.example
+│   ├── package.json
+│   └── package-lock.json
+│
+├── frontend/
+│   ├── src/
+│   ├── public/
+│   ├── index.html
+│   ├── vite.config.js
+│   ├── package.json
+│   └── package-lock.json
+│
+├── .gitignore
+└── README.md
 ```
-
-Obtiene todos los registros almacenados en la tabla `posts`.
-
-### Crear un post
-
-```http
-POST /posts
-```
-
-Recibe un nuevo post y lo almacena en PostgreSQL.
 
 ## Base de datos
 
-Crear la base de datos:
+Se utiliza una base de datos PostgreSQL llamada `likeme` con la siguiente tabla:
 
 ```sql
 CREATE DATABASE likeme;
-```
 
-Luego crear la tabla `posts`:
-
-```sql
 CREATE TABLE posts (
   id SERIAL,
   titulo VARCHAR(25),
@@ -62,9 +85,45 @@ CREATE TABLE posts (
 );
 ```
 
+## Endpoints
+
+### Obtener publicaciones
+
+```http
+GET /posts
+```
+
+Obtiene todas las publicaciones almacenadas en PostgreSQL.
+
+### Crear una publicación
+
+```http
+POST /posts
+```
+
+Permite agregar una nueva publicación.
+
+### Dar like a una publicación
+
+```http
+PUT /posts/like/:id
+```
+
+Incrementa en uno la cantidad de likes de la publicación seleccionada.
+
+### Eliminar una publicación
+
+```http
+DELETE /posts/:id
+```
+
+Elimina una publicación según su `id`.
+
 ## Variables de entorno
 
-Crear un archivo `.env` tomando como referencia `.env.example`:
+El backend utiliza un archivo `.env` para configurar la conexión con PostgreSQL.
+
+Ejemplo disponible en `.env.example`:
 
 ```env
 DB_HOST=localhost
@@ -74,27 +133,46 @@ DB_NAME=likeme
 DB_PORT=5432
 ```
 
-## Instalación
+> El archivo `.env` no se incluye en el repositorio por seguridad.
 
-Instalar las dependencias:
+## Instalación y ejecución
+
+Clonar el repositorio e instalar las dependencias de cada aplicación.
+
+### Backend
 
 ```bash
+cd backend
 npm install
-```
-
-Ejecutar el frontend:
-
-```bash
-npm run dev
-```
-
-Ejecutar el servidor:
-
-```bash
 npm run server
 ```
 
-El frontend se ejecuta con Vite y el servidor Express utiliza el puerto `3000`.
+El servidor se ejecuta en:
+
+```text
+http://localhost:3000
+```
+
+### Frontend
+
+En otra terminal:
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+Vite mostrará en la terminal la dirección local para abrir la aplicación.
+
+## Funcionalidades
+
+- Crear publicaciones.
+- Visualizar publicaciones.
+- Dar likes a las publicaciones.
+- Eliminar publicaciones.
+- Persistir los datos en PostgreSQL.
+- Manejar errores de consultas SQL mediante `try/catch`.
 
 ## Autor
 
